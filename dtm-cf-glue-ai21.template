@@ -1,0 +1,1797 @@
+AWSTemplateFormatVersion: "2010-09-09"
+
+Parameters:
+  Env:
+    Type: String
+    Description: Enter Environment ID 
+  RoleARN:
+    Type: String
+    Description: Enter ARN of the IAM Role for Glue Jobs
+  Extension:
+    Type: String
+    Description: Enter File Format for Workflow Parameter
+
+Resources:
+  Workflow1:
+    Type: AWS::Glue::Workflow
+    Properties:
+      DefaultRunProperties: { "EXTENSION": { "Fn::Sub": "${Extension}" }
+        ,"CHARS_TO_SPACE": "(?!\\x09)(?!\\x0A)(?!\\x0D)[\\x00-\\x1F]|\\x7F" }
+      Description: Workflow for orchestrating my jobs
+      Name: !Sub dtm_${Env}_glue_wf_ai21_daily
+    DependsOn:
+      - CleansingJob0001
+      - CleansingJob0002
+      - CleansingJob0003
+      - CleansingJob0004
+      - CleansingJob0006
+      - CleansingJob0007
+      - CleansingJob0008
+      - CleansingJob0009
+      - CleansingJob0011
+      - CleansingJob0012
+      - CleansingJob0013
+      - CleansingJob0014
+      - CleansingJob0015
+      - CleansingJob0016
+      - CleansingJob0017
+      - CleansingJob0018
+      - CleansingJob0019
+      - CleansingJob0020
+      - CleansingJob0021
+      - CleansingJob0022
+      - CleansingJob0023
+      - CleansingJob0024
+      - CleansingJob0025
+      - CleansingJob0026
+      - CleansingJob0027
+      - CleansingJob0028
+      - CleansingJob0029
+      - CleansingJob0030
+      - CleansingJob0031
+      - CleansingJob0032
+      - CleansingJob0033
+      - CleansingJob0034
+      - CleansingJob0035
+      - CleansingJob0036
+      - CleansingJob0037
+      - CleansingJob0038
+      - CleansingJob0040
+      - CleansingJob0041
+      - CleansingJob0043
+      - CleansingJob0044
+      - CleansingJob0046
+      - CleansingJob0048
+      - CleansingJob0050
+      - CleansingJob0064
+      - CleansingJob0065
+      - CleansingJob0068
+      - CleansingJob0069
+      - CleansingJob0077
+      - CleansingJob0078
+      - CleansingJob0080
+      - CleansingJob0081
+      - CleansingJob0082
+      - CleansingJob0083
+
+  WorkflowTrigger1:
+    Type: AWS::Glue::Trigger
+    Properties:
+      Name: !Sub dtm_${Env}_glue_trg_ai21_daily
+      WorkflowName: !Sub dtm_${Env}_glue_wf_ai21_daily
+      Type: SCHEDULED
+      Schedule: cron(0 2 * * ? *)
+      StartOnCreation: true
+      Actions:
+        - JobName: !Sub dtm_${Env}_glue_job_dl_dcj_0016
+        - JobName: !Sub dtm_${Env}_glue_job_dl_dcj_0017
+        - JobName: !Sub dtm_${Env}_glue_job_dl_dcj_0080
+    DependsOn: Workflow1
+
+  WorkflowTrigger2:
+    Type: AWS::Glue::Trigger
+    Properties:
+      Name: !Sub dtm_${Env}_glue_trg_ai21_daily_serial_01
+      WorkflowName: !Sub dtm_${Env}_glue_wf_ai21_daily
+      Type: CONDITIONAL
+      StartOnCreation: true
+      Predicate:
+        Conditions:
+          - LogicalOperator: EQUALS
+            JobName: !Sub dtm_${Env}_glue_job_dl_dcj_0080
+            State: SUCCEEDED
+      Actions:
+        - JobName: !Sub dtm_${Env}_glue_job_dl_dcj_0001
+        - JobName: !Sub dtm_${Env}_glue_job_dl_dcj_0002
+        - JobName: !Sub dtm_${Env}_glue_job_dl_dcj_0003
+        - JobName: !Sub dtm_${Env}_glue_job_dl_dcj_0004
+        - JobName: !Sub dtm_${Env}_glue_job_dl_dcj_0006
+        - JobName: !Sub dtm_${Env}_glue_job_dl_dcj_0007
+        - JobName: !Sub dtm_${Env}_glue_job_dl_dcj_0008
+        - JobName: !Sub dtm_${Env}_glue_job_dl_dcj_0009
+        - JobName: !Sub dtm_${Env}_glue_job_dl_dcj_0011
+        - JobName: !Sub dtm_${Env}_glue_job_dl_dcj_0012
+        - JobName: !Sub dtm_${Env}_glue_job_dl_dcj_0013
+        - JobName: !Sub dtm_${Env}_glue_job_dl_dcj_0014
+        - JobName: !Sub dtm_${Env}_glue_job_dl_dcj_0015
+        - JobName: !Sub dtm_${Env}_glue_job_dl_dcj_0018
+        - JobName: !Sub dtm_${Env}_glue_job_dl_dcj_0019
+        - JobName: !Sub dtm_${Env}_glue_job_dl_dcj_0020
+        - JobName: !Sub dtm_${Env}_glue_job_dl_dcj_0021
+        - JobName: !Sub dtm_${Env}_glue_job_dl_dcj_0022
+        - JobName: !Sub dtm_${Env}_glue_job_dl_dcj_0023
+        - JobName: !Sub dtm_${Env}_glue_job_dl_dcj_0024
+        - JobName: !Sub dtm_${Env}_glue_job_dl_dcj_0025
+        - JobName: !Sub dtm_${Env}_glue_job_dl_dcj_0026
+        - JobName: !Sub dtm_${Env}_glue_job_dl_dcj_0027
+        - JobName: !Sub dtm_${Env}_glue_job_dl_dcj_0028
+        - JobName: !Sub dtm_${Env}_glue_job_dl_dcj_0029
+        - JobName: !Sub dtm_${Env}_glue_job_dl_dcj_0030
+        - JobName: !Sub dtm_${Env}_glue_job_dl_dcj_0031
+        - JobName: !Sub dtm_${Env}_glue_job_dl_dcj_0032
+        - JobName: !Sub dtm_${Env}_glue_job_dl_dcj_0033
+        - JobName: !Sub dtm_${Env}_glue_job_dl_dcj_0034
+        - JobName: !Sub dtm_${Env}_glue_job_dl_dcj_0035
+        - JobName: !Sub dtm_${Env}_glue_job_dl_dcj_0036
+        - JobName: !Sub dtm_${Env}_glue_job_dl_dcj_0037
+        - JobName: !Sub dtm_${Env}_glue_job_dl_dcj_0038
+        - JobName: !Sub dtm_${Env}_glue_job_dl_dcj_0040
+        - JobName: !Sub dtm_${Env}_glue_job_dl_dcj_0041
+        - JobName: !Sub dtm_${Env}_glue_job_dl_dcj_0043
+        - JobName: !Sub dtm_${Env}_glue_job_dl_dcj_0044
+        - JobName: !Sub dtm_${Env}_glue_job_dl_dcj_0046
+        - JobName: !Sub dtm_${Env}_glue_job_dl_dcj_0048
+        - JobName: !Sub dtm_${Env}_glue_job_dl_dcj_0050
+        - JobName: !Sub dtm_${Env}_glue_job_dl_dcj_0064
+        - JobName: !Sub dtm_${Env}_glue_job_dl_dcj_0065
+        - JobName: !Sub dtm_${Env}_glue_job_dl_dcj_0068
+        - JobName: !Sub dtm_${Env}_glue_job_dl_dcj_0069
+        - JobName: !Sub dtm_${Env}_glue_job_dl_dcj_0077
+        - JobName: !Sub dtm_${Env}_glue_job_dl_dcj_0078
+        - JobName: !Sub dtm_${Env}_glue_job_dl_dcj_0081
+        - JobName: !Sub dtm_${Env}_glue_job_dl_dcj_0082
+        - JobName: !Sub dtm_${Env}_glue_job_dl_dcj_0083
+    DependsOn: Workflow1
+
+  CleansingJob0001:
+    Type: AWS::Glue::Job
+    Properties:
+      Name: !Sub dtm_${Env}_glue_job_dl_dcj_0001
+      Role: !Sub ${RoleARN}
+      ExecutionProperty:
+        MaxConcurrentRuns: 1
+      Command:
+        Name: glueetl
+        ScriptLocation: !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/dtm_glue_job_dl_dcj_0001.py
+        PythonVersion: "3"
+      DefaultArguments:
+        "--DEST_BUCKET_NAME": !Sub dtm-${Env}-s3-01-datalake-03-cleansing-data-csv
+        "--SRC_BUCKET_NAME": !Sub dtm-${Env}-s3-01-datalake-01-raw-data
+        "--DEST_FOLDER_NAME": "/ai21/tbac001m/"
+        "--SRC_FOLDER_NAME": "/ai21/TBAC001M/"
+        "--TempDir": !Sub s3://dtm-${Env}-s3-01-datalake-02-cleansing-data-csv-temp/temporary/
+        "--enable-continuous-cloudwatch-log": "true"
+        "--enable-metrics": ""
+        "--extra-jars": !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/lib/log4j-web-2.14.1.jar
+        "--extra-py-files": !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/lib/dtm_glue_job_lib.zip
+        "--job-bookmark-option": job-bookmark-enable
+        "--job-language": python
+      MaxRetries: 0
+      Timeout: 180
+      WorkerType: G.2X
+      NumberOfWorkers: 2
+      NotificationProperty:
+        NotifyDelayAfter: 30
+      GlueVersion: 2.0
+
+  CleansingJob0002:
+    Type: AWS::Glue::Job
+    Properties:
+      Name: !Sub dtm_${Env}_glue_job_dl_dcj_0002
+      Role: !Sub ${RoleARN}
+      ExecutionProperty:
+        MaxConcurrentRuns: 1
+      Command:
+        Name: glueetl
+        ScriptLocation: !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/dtm_glue_job_dl_dcj_0002.py
+        PythonVersion: "3"
+      DefaultArguments:
+        "--DEST_BUCKET_NAME": !Sub dtm-${Env}-s3-01-datalake-03-cleansing-data-csv
+        "--SRC_BUCKET_NAME": !Sub dtm-${Env}-s3-01-datalake-01-raw-data
+        "--DEST_FOLDER_NAME": "/ai21/tbac003m/"
+        "--SRC_FOLDER_NAME": "/ai21/TBAC003M/"
+        "--TempDir": !Sub s3://dtm-${Env}-s3-01-datalake-02-cleansing-data-csv-temp/temporary/
+        "--enable-continuous-cloudwatch-log": "true"
+        "--enable-metrics": ""
+        "--extra-jars": !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/lib/log4j-web-2.14.1.jar
+        "--extra-py-files": !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/lib/dtm_glue_job_lib.zip
+        "--job-bookmark-option": job-bookmark-enable
+        "--job-language": python
+      MaxRetries: 0
+      Timeout: 180
+      WorkerType: G.2X
+      NumberOfWorkers: 2
+      NotificationProperty:
+        NotifyDelayAfter: 30
+      GlueVersion: 2.0
+
+  CleansingJob0003:
+    Type: AWS::Glue::Job
+    Properties:
+      Name: !Sub dtm_${Env}_glue_job_dl_dcj_0003
+      Role: !Sub ${RoleARN}
+      ExecutionProperty:
+        MaxConcurrentRuns: 1
+      Command:
+        Name: glueetl
+        ScriptLocation: !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/dtm_glue_job_dl_dcj_0003.py
+        PythonVersion: "3"
+      DefaultArguments:
+        "--DEST_BUCKET_NAME": !Sub dtm-${Env}-s3-01-datalake-03-cleansing-data-csv
+        "--SRC_BUCKET_NAME": !Sub dtm-${Env}-s3-01-datalake-01-raw-data
+        "--DEST_FOLDER_NAME": "/ai21/tbaz000m/"
+        "--SRC_FOLDER_NAME": "/ai21/TBAZ000M/"
+        "--TempDir": !Sub s3://dtm-${Env}-s3-01-datalake-02-cleansing-data-csv-temp/temporary/
+        "--enable-continuous-cloudwatch-log": "true"
+        "--enable-metrics": ""
+        "--extra-jars": !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/lib/log4j-web-2.14.1.jar
+        "--extra-py-files": !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/lib/dtm_glue_job_lib.zip
+        "--job-bookmark-option": job-bookmark-enable
+        "--job-language": python
+      MaxRetries: 0
+      Timeout: 180
+      WorkerType: G.2X
+      NumberOfWorkers: 2
+      NotificationProperty:
+        NotifyDelayAfter: 30
+      GlueVersion: 2.0
+
+  CleansingJob0004:
+    Type: AWS::Glue::Job
+    Properties:
+      Name: !Sub dtm_${Env}_glue_job_dl_dcj_0004
+      Role: !Sub ${RoleARN}
+      ExecutionProperty:
+        MaxConcurrentRuns: 1
+      Command:
+        Name: glueetl
+        ScriptLocation: !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/dtm_glue_job_dl_dcj_0004.py
+        PythonVersion: "3"
+      DefaultArguments:
+        "--DEST_BUCKET_NAME": !Sub dtm-${Env}-s3-01-datalake-03-cleansing-data-csv
+        "--SRC_BUCKET_NAME": !Sub dtm-${Env}-s3-01-datalake-01-raw-data
+        "--DEST_FOLDER_NAME": "/ai21/tbaz001m/"
+        "--SRC_FOLDER_NAME": "/ai21/TBAZ001M/"
+        "--TempDir": !Sub s3://dtm-${Env}-s3-01-datalake-02-cleansing-data-csv-temp/temporary/
+        "--enable-continuous-cloudwatch-log": "true"
+        "--enable-metrics": ""
+        "--extra-jars": !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/lib/log4j-web-2.14.1.jar
+        "--extra-py-files": !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/lib/dtm_glue_job_lib.zip
+        "--job-bookmark-option": job-bookmark-enable
+        "--job-language": python
+      MaxRetries: 0
+      Timeout: 180
+      WorkerType: G.2X
+      NumberOfWorkers: 2
+      NotificationProperty:
+        NotifyDelayAfter: 30
+      GlueVersion: 2.0
+
+  CleansingJob0006:
+    Type: AWS::Glue::Job
+    Properties:
+      Name: !Sub dtm_${Env}_glue_job_dl_dcj_0006
+      Role: !Sub ${RoleARN}
+      ExecutionProperty:
+        MaxConcurrentRuns: 1
+      Command:
+        Name: glueetl
+        ScriptLocation: !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/dtm_glue_job_dl_dcj_0006.py
+        PythonVersion: "3"
+      DefaultArguments:
+        "--DEST_BUCKET_NAME": !Sub dtm-${Env}-s3-01-datalake-03-cleansing-data-csv
+        "--SRC_BUCKET_NAME": !Sub dtm-${Env}-s3-01-datalake-01-raw-data
+        "--DEST_FOLDER_NAME": "/ai21/tbaz006m/"
+        "--SRC_FOLDER_NAME": "/ai21/TBAZ006M/"
+        "--TempDir": !Sub s3://dtm-${Env}-s3-01-datalake-02-cleansing-data-csv-temp/temporary/
+        "--enable-continuous-cloudwatch-log": "true"
+        "--enable-metrics": ""
+        "--extra-jars": !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/lib/log4j-web-2.14.1.jar
+        "--extra-py-files": !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/lib/dtm_glue_job_lib.zip
+        "--job-bookmark-option": job-bookmark-enable
+        "--job-language": python
+      MaxRetries: 0
+      Timeout: 180
+      WorkerType: G.2X
+      NumberOfWorkers: 2
+      NotificationProperty:
+        NotifyDelayAfter: 30
+      GlueVersion: 2.0
+
+  CleansingJob0007:
+    Type: AWS::Glue::Job
+    Properties:
+      Name: !Sub dtm_${Env}_glue_job_dl_dcj_0007
+      Role: !Sub ${RoleARN}
+      ExecutionProperty:
+        MaxConcurrentRuns: 1
+      Command:
+        Name: glueetl
+        ScriptLocation: !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/dtm_glue_job_dl_dcj_0007.py
+        PythonVersion: "3"
+      DefaultArguments:
+        "--DEST_BUCKET_NAME": !Sub dtm-${Env}-s3-01-datalake-03-cleansing-data-csv
+        "--SRC_BUCKET_NAME": !Sub dtm-${Env}-s3-01-datalake-01-raw-data
+        "--DEST_FOLDER_NAME": "/ai21/tbaz010m/"
+        "--SRC_FOLDER_NAME": "/ai21/TBAZ010M/"
+        "--TempDir": !Sub s3://dtm-${Env}-s3-01-datalake-02-cleansing-data-csv-temp/temporary/
+        "--enable-continuous-cloudwatch-log": "true"
+        "--enable-metrics": ""
+        "--extra-jars": !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/lib/log4j-web-2.14.1.jar
+        "--extra-py-files": !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/lib/dtm_glue_job_lib.zip
+        "--job-bookmark-option": job-bookmark-enable
+        "--job-language": python
+      MaxRetries: 0
+      Timeout: 180
+      WorkerType: G.2X
+      NumberOfWorkers: 2
+      NotificationProperty:
+        NotifyDelayAfter: 30
+      GlueVersion: 2.0
+
+  CleansingJob0008:
+    Type: AWS::Glue::Job
+    Properties:
+      Name: !Sub dtm_${Env}_glue_job_dl_dcj_0008
+      Role: !Sub ${RoleARN}
+      ExecutionProperty:
+        MaxConcurrentRuns: 1
+      Command:
+        Name: glueetl
+        ScriptLocation: !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/dtm_glue_job_dl_dcj_0008.py
+        PythonVersion: "3"
+      DefaultArguments:
+        "--DEST_BUCKET_NAME": !Sub dtm-${Env}-s3-01-datalake-03-cleansing-data-csv
+        "--SRC_BUCKET_NAME": !Sub dtm-${Env}-s3-01-datalake-01-raw-data
+        "--DEST_FOLDER_NAME": "/ai21/tbaz013m/"
+        "--SRC_FOLDER_NAME": "/ai21/TBAZ013M/"
+        "--TempDir": !Sub s3://dtm-${Env}-s3-01-datalake-02-cleansing-data-csv-temp/temporary/
+        "--enable-continuous-cloudwatch-log": "true"
+        "--enable-metrics": ""
+        "--extra-jars": !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/lib/log4j-web-2.14.1.jar
+        "--extra-py-files": !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/lib/dtm_glue_job_lib.zip
+        "--job-bookmark-option": job-bookmark-enable
+        "--job-language": python
+      MaxRetries: 0
+      Timeout: 180
+      WorkerType: G.2X
+      NumberOfWorkers: 2
+      NotificationProperty:
+        NotifyDelayAfter: 30
+      GlueVersion: 2.0
+
+  CleansingJob0009:
+    Type: AWS::Glue::Job
+    Properties:
+      Name: !Sub dtm_${Env}_glue_job_dl_dcj_0009
+      Role: !Sub ${RoleARN}
+      ExecutionProperty:
+        MaxConcurrentRuns: 1
+      Command:
+        Name: glueetl
+        ScriptLocation: !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/dtm_glue_job_dl_dcj_0009.py
+        PythonVersion: "3"
+      DefaultArguments:
+        "--DEST_BUCKET_NAME": !Sub dtm-${Env}-s3-01-datalake-03-cleansing-data-csv
+        "--SRC_BUCKET_NAME": !Sub dtm-${Env}-s3-01-datalake-01-raw-data
+        "--DEST_FOLDER_NAME": "/ai21/tbaz014m/"
+        "--SRC_FOLDER_NAME": "/ai21/TBAZ014M/"
+        "--TempDir": !Sub s3://dtm-${Env}-s3-01-datalake-02-cleansing-data-csv-temp/temporary/
+        "--enable-continuous-cloudwatch-log": "true"
+        "--enable-metrics": ""
+        "--extra-jars": !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/lib/log4j-web-2.14.1.jar
+        "--extra-py-files": !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/lib/dtm_glue_job_lib.zip
+        "--job-bookmark-option": job-bookmark-enable
+        "--job-language": python
+      MaxRetries: 0
+      Timeout: 180
+      WorkerType: G.2X
+      NumberOfWorkers: 2
+      NotificationProperty:
+        NotifyDelayAfter: 30
+      GlueVersion: 2.0
+
+  CleansingJob0011:
+    Type: AWS::Glue::Job
+    Properties:
+      Name: !Sub dtm_${Env}_glue_job_dl_dcj_0011
+      Role: !Sub ${RoleARN}
+      ExecutionProperty:
+        MaxConcurrentRuns: 1
+      Command:
+        Name: glueetl
+        ScriptLocation: !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/dtm_glue_job_dl_dcj_0011.py
+        PythonVersion: "3"
+      DefaultArguments:
+        "--DEST_BUCKET_NAME": !Sub dtm-${Env}-s3-01-datalake-03-cleansing-data-csv
+        "--SRC_BUCKET_NAME": !Sub dtm-${Env}-s3-01-datalake-01-raw-data
+        "--DEST_FOLDER_NAME": "/ai21/tbaz016m/"
+        "--SRC_FOLDER_NAME": "/ai21/TBAZ016M/"
+        "--TempDir": !Sub s3://dtm-${Env}-s3-01-datalake-02-cleansing-data-csv-temp/temporary/
+        "--enable-continuous-cloudwatch-log": "true"
+        "--enable-metrics": ""
+        "--extra-jars": !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/lib/log4j-web-2.14.1.jar
+        "--extra-py-files": !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/lib/dtm_glue_job_lib.zip
+        "--job-bookmark-option": job-bookmark-enable
+        "--job-language": python
+      MaxRetries: 0
+      Timeout: 180
+      WorkerType: G.2X
+      NumberOfWorkers: 2
+      NotificationProperty:
+        NotifyDelayAfter: 30
+      GlueVersion: 2.0
+
+  CleansingJob0012:
+    Type: AWS::Glue::Job
+    Properties:
+      Name: !Sub dtm_${Env}_glue_job_dl_dcj_0012
+      Role: !Sub ${RoleARN}
+      ExecutionProperty:
+        MaxConcurrentRuns: 1
+      Command:
+        Name: glueetl
+        ScriptLocation: !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/dtm_glue_job_dl_dcj_0012.py
+        PythonVersion: "3"
+      DefaultArguments:
+        "--DEST_BUCKET_NAME": !Sub dtm-${Env}-s3-01-datalake-03-cleansing-data-csv
+        "--SRC_BUCKET_NAME": !Sub dtm-${Env}-s3-01-datalake-01-raw-data
+        "--DEST_FOLDER_NAME": "/ai21/tbaz017m/"
+        "--SRC_FOLDER_NAME": "/ai21/TBAZ017M/"
+        "--TempDir": !Sub s3://dtm-${Env}-s3-01-datalake-02-cleansing-data-csv-temp/temporary/
+        "--enable-continuous-cloudwatch-log": "true"
+        "--enable-metrics": ""
+        "--extra-jars": !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/lib/log4j-web-2.14.1.jar
+        "--extra-py-files": !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/lib/dtm_glue_job_lib.zip
+        "--job-bookmark-option": job-bookmark-enable
+        "--job-language": python
+      MaxRetries: 0
+      Timeout: 180
+      WorkerType: G.2X
+      NumberOfWorkers: 2
+      NotificationProperty:
+        NotifyDelayAfter: 30
+      GlueVersion: 2.0
+
+  CleansingJob0013:
+    Type: AWS::Glue::Job
+    Properties:
+      Name: !Sub dtm_${Env}_glue_job_dl_dcj_0013
+      Role: !Sub ${RoleARN}
+      ExecutionProperty:
+        MaxConcurrentRuns: 1
+      Command:
+        Name: glueetl
+        ScriptLocation: !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/dtm_glue_job_dl_dcj_0013.py
+        PythonVersion: "3"
+      DefaultArguments:
+        "--DEST_BUCKET_NAME": !Sub dtm-${Env}-s3-01-datalake-03-cleansing-data-csv
+        "--SRC_BUCKET_NAME": !Sub dtm-${Env}-s3-01-datalake-01-raw-data
+        "--DEST_FOLDER_NAME": "/ai21/tbaz018m/"
+        "--SRC_FOLDER_NAME": "/ai21/TBAZ018M/"
+        "--TempDir": !Sub s3://dtm-${Env}-s3-01-datalake-02-cleansing-data-csv-temp/temporary/
+        "--enable-continuous-cloudwatch-log": "true"
+        "--enable-metrics": ""
+        "--extra-jars": !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/lib/log4j-web-2.14.1.jar
+        "--extra-py-files": !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/lib/dtm_glue_job_lib.zip
+        "--job-bookmark-option": job-bookmark-enable
+        "--job-language": python
+      MaxRetries: 0
+      Timeout: 180
+      WorkerType: G.2X
+      NumberOfWorkers: 2
+      NotificationProperty:
+        NotifyDelayAfter: 30
+      GlueVersion: 2.0
+
+  CleansingJob0014:
+    Type: AWS::Glue::Job
+    Properties:
+      Name: !Sub dtm_${Env}_glue_job_dl_dcj_0014
+      Role: !Sub ${RoleARN}
+      ExecutionProperty:
+        MaxConcurrentRuns: 1
+      Command:
+        Name: glueetl
+        ScriptLocation: !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/dtm_glue_job_dl_dcj_0014.py
+        PythonVersion: "3"
+      DefaultArguments:
+        "--DEST_BUCKET_NAME": !Sub dtm-${Env}-s3-01-datalake-03-cleansing-data-csv
+        "--SRC_BUCKET_NAME": !Sub dtm-${Env}-s3-01-datalake-01-raw-data
+        "--DEST_FOLDER_NAME": "/ai21/tbaz024m/"
+        "--SRC_FOLDER_NAME": "/ai21/TBAZ024M/"
+        "--TempDir": !Sub s3://dtm-${Env}-s3-01-datalake-02-cleansing-data-csv-temp/temporary/
+        "--enable-continuous-cloudwatch-log": "true"
+        "--enable-metrics": ""
+        "--extra-jars": !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/lib/log4j-web-2.14.1.jar
+        "--extra-py-files": !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/lib/dtm_glue_job_lib.zip
+        "--job-bookmark-option": job-bookmark-enable
+        "--job-language": python
+      MaxRetries: 0
+      Timeout: 180
+      WorkerType: G.2X
+      NumberOfWorkers: 2
+      NotificationProperty:
+        NotifyDelayAfter: 30
+      GlueVersion: 2.0
+
+  CleansingJob0015:
+    Type: AWS::Glue::Job
+    Properties:
+      Name: !Sub dtm_${Env}_glue_job_dl_dcj_0015
+      Role: !Sub ${RoleARN}
+      ExecutionProperty:
+        MaxConcurrentRuns: 1
+      Command:
+        Name: glueetl
+        ScriptLocation: !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/dtm_glue_job_dl_dcj_0015.py
+        PythonVersion: "3"
+      DefaultArguments:
+        "--DEST_BUCKET_NAME": !Sub dtm-${Env}-s3-01-datalake-03-cleansing-data-csv
+        "--SRC_BUCKET_NAME": !Sub dtm-${Env}-s3-01-datalake-01-raw-data
+        "--DEST_FOLDER_NAME": "/ai21/tbaz030m/"
+        "--SRC_FOLDER_NAME": "/ai21/TBAZ030M/"
+        "--TempDir": !Sub s3://dtm-${Env}-s3-01-datalake-02-cleansing-data-csv-temp/temporary/
+        "--enable-continuous-cloudwatch-log": "true"
+        "--enable-metrics": ""
+        "--extra-jars": !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/lib/log4j-web-2.14.1.jar
+        "--extra-py-files": !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/lib/dtm_glue_job_lib.zip
+        "--job-bookmark-option": job-bookmark-enable
+        "--job-language": python
+      MaxRetries: 0
+      Timeout: 180
+      WorkerType: G.2X
+      NumberOfWorkers: 2
+      NotificationProperty:
+        NotifyDelayAfter: 30
+      GlueVersion: 2.0
+
+  CleansingJob0016:
+    Type: AWS::Glue::Job
+    Properties:
+      Name: !Sub dtm_${Env}_glue_job_dl_dcj_0016
+      Role: !Sub ${RoleARN}
+      ExecutionProperty:
+        MaxConcurrentRuns: 1
+      Command:
+        Name: glueetl
+        ScriptLocation: !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/dtm_glue_job_dl_dcj_0016.py
+        PythonVersion: "3"
+      DefaultArguments:
+        "--DEST_BUCKET_NAME": !Sub dtm-${Env}-s3-01-datalake-03-cleansing-data-csv
+        "--SRC_BUCKET_NAME": !Sub dtm-${Env}-s3-01-datalake-01-raw-data
+        "--DEST_FOLDER_NAME": "/ai21/tbaz032m/"
+        "--SRC_FOLDER_NAME": "/ai21/TBAZ032M/"
+        "--TempDir": !Sub s3://dtm-${Env}-s3-01-datalake-02-cleansing-data-csv-temp/temporary/
+        "--enable-continuous-cloudwatch-log": "true"
+        "--enable-metrics": ""
+        "--extra-jars": !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/lib/log4j-web-2.14.1.jar
+        "--extra-py-files": !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/lib/dtm_glue_job_lib.zip
+        "--job-bookmark-option": job-bookmark-enable
+        "--job-language": python
+      MaxRetries: 0
+      Timeout: 180
+      WorkerType: G.2X
+      NumberOfWorkers: 2
+      NotificationProperty:
+        NotifyDelayAfter: 30
+      GlueVersion: 2.0
+
+  CleansingJob0017:
+    Type: AWS::Glue::Job
+    Properties:
+      Name: !Sub dtm_${Env}_glue_job_dl_dcj_0017
+      Role: !Sub ${RoleARN}
+      ExecutionProperty:
+        MaxConcurrentRuns: 1
+      Command:
+        Name: glueetl
+        ScriptLocation: !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/dtm_glue_job_dl_dcj_0017.py
+        PythonVersion: "3"
+      DefaultArguments:
+        "--DEST_BUCKET_NAME": !Sub dtm-${Env}-s3-01-datalake-03-cleansing-data-csv
+        "--SRC_BUCKET_NAME": !Sub dtm-${Env}-s3-01-datalake-01-raw-data
+        "--DEST_FOLDER_NAME": "/ai21/tbaz034m/"
+        "--SRC_FOLDER_NAME": "/ai21/TBAZ034M/"
+        "--TempDir": !Sub s3://dtm-${Env}-s3-01-datalake-02-cleansing-data-csv-temp/temporary/
+        "--enable-continuous-cloudwatch-log": "true"
+        "--enable-metrics": ""
+        "--extra-jars": !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/lib/log4j-web-2.14.1.jar
+        "--extra-py-files": !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/lib/dtm_glue_job_lib.zip
+        "--job-bookmark-option": job-bookmark-enable
+        "--job-language": python
+      MaxRetries: 0
+      Timeout: 180
+      WorkerType: G.2X
+      NumberOfWorkers: 2
+      NotificationProperty:
+        NotifyDelayAfter: 30
+      GlueVersion: 2.0
+
+  CleansingJob0018:
+    Type: AWS::Glue::Job
+    Properties:
+      Name: !Sub dtm_${Env}_glue_job_dl_dcj_0018
+      Role: !Sub ${RoleARN}
+      ExecutionProperty:
+        MaxConcurrentRuns: 1
+      Command:
+        Name: glueetl
+        ScriptLocation: !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/dtm_glue_job_dl_dcj_0018.py
+        PythonVersion: "3"
+      DefaultArguments:
+        "--DEST_BUCKET_NAME": !Sub dtm-${Env}-s3-01-datalake-03-cleansing-data-csv
+        "--SRC_BUCKET_NAME": !Sub dtm-${Env}-s3-01-datalake-01-raw-data
+        "--DEST_FOLDER_NAME": "/ai21/tbaz050m/"
+        "--SRC_FOLDER_NAME": "/ai21/TBAZ050M/"
+        "--TempDir": !Sub s3://dtm-${Env}-s3-01-datalake-02-cleansing-data-csv-temp/temporary/
+        "--enable-continuous-cloudwatch-log": "true"
+        "--enable-metrics": ""
+        "--extra-jars": !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/lib/log4j-web-2.14.1.jar
+        "--extra-py-files": !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/lib/dtm_glue_job_lib.zip
+        "--job-bookmark-option": job-bookmark-enable
+        "--job-language": python
+      MaxRetries: 0
+      Timeout: 180
+      WorkerType: G.2X
+      NumberOfWorkers: 2
+      NotificationProperty:
+        NotifyDelayAfter: 30
+      GlueVersion: 2.0
+
+  CleansingJob0019:
+    Type: AWS::Glue::Job
+    Properties:
+      Name: !Sub dtm_${Env}_glue_job_dl_dcj_0019
+      Role: !Sub ${RoleARN}
+      ExecutionProperty:
+        MaxConcurrentRuns: 1
+      Command:
+        Name: glueetl
+        ScriptLocation: !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/dtm_glue_job_dl_dcj_0019.py
+        PythonVersion: "3"
+      DefaultArguments:
+        "--DEST_BUCKET_NAME": !Sub dtm-${Env}-s3-01-datalake-03-cleansing-data-csv
+        "--SRC_BUCKET_NAME": !Sub dtm-${Env}-s3-01-datalake-01-raw-data
+        "--DEST_FOLDER_NAME": "/ai21/tbaz097m/"
+        "--SRC_FOLDER_NAME": "/ai21/TBAZ097M/"
+        "--TempDir": !Sub s3://dtm-${Env}-s3-01-datalake-02-cleansing-data-csv-temp/temporary/
+        "--enable-continuous-cloudwatch-log": "true"
+        "--enable-metrics": ""
+        "--extra-jars": !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/lib/log4j-web-2.14.1.jar
+        "--extra-py-files": !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/lib/dtm_glue_job_lib.zip
+        "--job-bookmark-option": job-bookmark-enable
+        "--job-language": python
+      MaxRetries: 0
+      Timeout: 180
+      WorkerType: G.2X
+      NumberOfWorkers: 2
+      NotificationProperty:
+        NotifyDelayAfter: 30
+      GlueVersion: 2.0
+
+  CleansingJob0020:
+    Type: AWS::Glue::Job
+    Properties:
+      Name: !Sub dtm_${Env}_glue_job_dl_dcj_0020
+      Role: !Sub ${RoleARN}
+      ExecutionProperty:
+        MaxConcurrentRuns: 1
+      Command:
+        Name: glueetl
+        ScriptLocation: !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/dtm_glue_job_dl_dcj_0020.py
+        PythonVersion: "3"
+      DefaultArguments:
+        "--DEST_BUCKET_NAME": !Sub dtm-${Env}-s3-01-datalake-03-cleansing-data-csv
+        "--SRC_BUCKET_NAME": !Sub dtm-${Env}-s3-01-datalake-01-raw-data
+        "--DEST_FOLDER_NAME": "/ai21/tbaz508m/"
+        "--SRC_FOLDER_NAME": "/ai21/TBAZ508M/"
+        "--TempDir": !Sub s3://dtm-${Env}-s3-01-datalake-02-cleansing-data-csv-temp/temporary/
+        "--enable-continuous-cloudwatch-log": "true"
+        "--enable-metrics": ""
+        "--extra-jars": !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/lib/log4j-web-2.14.1.jar
+        "--extra-py-files": !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/lib/dtm_glue_job_lib.zip
+        "--job-bookmark-option": job-bookmark-enable
+        "--job-language": python
+      MaxRetries: 0
+      Timeout: 180
+      WorkerType: G.2X
+      NumberOfWorkers: 2
+      NotificationProperty:
+        NotifyDelayAfter: 30
+      GlueVersion: 2.0
+
+  CleansingJob0021:
+    Type: AWS::Glue::Job
+    Properties:
+      Name: !Sub dtm_${Env}_glue_job_dl_dcj_0021
+      Role: !Sub ${RoleARN}
+      ExecutionProperty:
+        MaxConcurrentRuns: 1
+      Command:
+        Name: glueetl
+        ScriptLocation: !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/dtm_glue_job_dl_dcj_0021.py
+        PythonVersion: "3"
+      DefaultArguments:
+        "--DEST_BUCKET_NAME": !Sub dtm-${Env}-s3-01-datalake-03-cleansing-data-csv
+        "--SRC_BUCKET_NAME": !Sub dtm-${Env}-s3-01-datalake-01-raw-data
+        "--DEST_FOLDER_NAME": "/ai21/tbaz524m/"
+        "--SRC_FOLDER_NAME": "/ai21/TBAZ524M/"
+        "--TempDir": !Sub s3://dtm-${Env}-s3-01-datalake-02-cleansing-data-csv-temp/temporary/
+        "--enable-continuous-cloudwatch-log": "true"
+        "--enable-metrics": ""
+        "--extra-jars": !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/lib/log4j-web-2.14.1.jar
+        "--extra-py-files": !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/lib/dtm_glue_job_lib.zip
+        "--job-bookmark-option": job-bookmark-enable
+        "--job-language": python
+      MaxRetries: 0
+      Timeout: 180
+      WorkerType: G.2X
+      NumberOfWorkers: 2
+      NotificationProperty:
+        NotifyDelayAfter: 30
+      GlueVersion: 2.0
+
+  CleansingJob0022:
+    Type: AWS::Glue::Job
+    Properties:
+      Name: !Sub dtm_${Env}_glue_job_dl_dcj_0022
+      Role: !Sub ${RoleARN}
+      ExecutionProperty:
+        MaxConcurrentRuns: 1
+      Command:
+        Name: glueetl
+        ScriptLocation: !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/dtm_glue_job_dl_dcj_0022.py
+        PythonVersion: "3"
+      DefaultArguments:
+        "--DEST_BUCKET_NAME": !Sub dtm-${Env}-s3-01-datalake-03-cleansing-data-csv
+        "--SRC_BUCKET_NAME": !Sub dtm-${Env}-s3-01-datalake-01-raw-data
+        "--DEST_FOLDER_NAME": "/ai21/tbaz529m/"
+        "--SRC_FOLDER_NAME": "/ai21/TBAZ529M/"
+        "--TempDir": !Sub s3://dtm-${Env}-s3-01-datalake-02-cleansing-data-csv-temp/temporary/
+        "--enable-continuous-cloudwatch-log": "true"
+        "--enable-metrics": ""
+        "--extra-jars": !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/lib/log4j-web-2.14.1.jar
+        "--extra-py-files": !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/lib/dtm_glue_job_lib.zip
+        "--job-bookmark-option": job-bookmark-enable
+        "--job-language": python
+      MaxRetries: 0
+      Timeout: 180
+      WorkerType: G.2X
+      NumberOfWorkers: 2
+      NotificationProperty:
+        NotifyDelayAfter: 30
+      GlueVersion: 2.0
+
+  CleansingJob0023:
+    Type: AWS::Glue::Job
+    Properties:
+      Name: !Sub dtm_${Env}_glue_job_dl_dcj_0023
+      Role: !Sub ${RoleARN}
+      ExecutionProperty:
+        MaxConcurrentRuns: 1
+      Command:
+        Name: glueetl
+        ScriptLocation: !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/dtm_glue_job_dl_dcj_0023.py
+        PythonVersion: "3"
+      DefaultArguments:
+        "--DEST_BUCKET_NAME": !Sub dtm-${Env}-s3-01-datalake-03-cleansing-data-csv
+        "--SRC_BUCKET_NAME": !Sub dtm-${Env}-s3-01-datalake-01-raw-data
+        "--DEST_FOLDER_NAME": "/ai21/tbaz530m/"
+        "--SRC_FOLDER_NAME": "/ai21/TBAZ530M/"
+        "--TempDir": !Sub s3://dtm-${Env}-s3-01-datalake-02-cleansing-data-csv-temp/temporary/
+        "--enable-continuous-cloudwatch-log": "true"
+        "--enable-metrics": ""
+        "--extra-jars": !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/lib/log4j-web-2.14.1.jar
+        "--extra-py-files": !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/lib/dtm_glue_job_lib.zip
+        "--job-bookmark-option": job-bookmark-enable
+        "--job-language": python
+      MaxRetries: 0
+      Timeout: 180
+      WorkerType: G.2X
+      NumberOfWorkers: 2
+      NotificationProperty:
+        NotifyDelayAfter: 30
+      GlueVersion: 2.0
+
+  CleansingJob0024:
+    Type: AWS::Glue::Job
+    Properties:
+      Name: !Sub dtm_${Env}_glue_job_dl_dcj_0024
+      Role: !Sub ${RoleARN}
+      ExecutionProperty:
+        MaxConcurrentRuns: 1
+      Command:
+        Name: glueetl
+        ScriptLocation: !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/dtm_glue_job_dl_dcj_0024.py
+        PythonVersion: "3"
+      DefaultArguments:
+        "--DEST_BUCKET_NAME": !Sub dtm-${Env}-s3-01-datalake-03-cleansing-data-csv
+        "--SRC_BUCKET_NAME": !Sub dtm-${Env}-s3-01-datalake-01-raw-data
+        "--DEST_FOLDER_NAME": "/ai21/tbaz543m/"
+        "--SRC_FOLDER_NAME": "/ai21/TBAZ543M/"
+        "--TempDir": !Sub s3://dtm-${Env}-s3-01-datalake-02-cleansing-data-csv-temp/temporary/
+        "--enable-continuous-cloudwatch-log": "true"
+        "--enable-metrics": ""
+        "--extra-jars": !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/lib/log4j-web-2.14.1.jar
+        "--extra-py-files": !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/lib/dtm_glue_job_lib.zip
+        "--job-bookmark-option": job-bookmark-enable
+        "--job-language": python
+      MaxRetries: 0
+      Timeout: 180
+      WorkerType: G.2X
+      NumberOfWorkers: 2
+      NotificationProperty:
+        NotifyDelayAfter: 30
+      GlueVersion: 2.0
+
+  CleansingJob0025:
+    Type: AWS::Glue::Job
+    Properties:
+      Name: !Sub dtm_${Env}_glue_job_dl_dcj_0025
+      Role: !Sub ${RoleARN}
+      ExecutionProperty:
+        MaxConcurrentRuns: 1
+      Command:
+        Name: glueetl
+        ScriptLocation: !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/dtm_glue_job_dl_dcj_0025.py
+        PythonVersion: "3"
+      DefaultArguments:
+        "--DEST_BUCKET_NAME": !Sub dtm-${Env}-s3-01-datalake-03-cleansing-data-csv
+        "--SRC_BUCKET_NAME": !Sub dtm-${Env}-s3-01-datalake-01-raw-data
+        "--DEST_FOLDER_NAME": "/ai21/tbba001g/"
+        "--SRC_FOLDER_NAME": "/ai21/TBBA001G/"
+        "--TempDir": !Sub s3://dtm-${Env}-s3-01-datalake-02-cleansing-data-csv-temp/temporary/
+        "--enable-continuous-cloudwatch-log": "true"
+        "--enable-metrics": ""
+        "--extra-jars": !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/lib/log4j-web-2.14.1.jar
+        "--extra-py-files": !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/lib/dtm_glue_job_lib.zip
+        "--job-bookmark-option": job-bookmark-enable
+        "--job-language": python
+      MaxRetries: 0
+      Timeout: 180
+      WorkerType: G.2X
+      NumberOfWorkers: 2
+      NotificationProperty:
+        NotifyDelayAfter: 30
+      GlueVersion: 2.0
+
+  CleansingJob0026:
+    Type: AWS::Glue::Job
+    Properties:
+      Name: !Sub dtm_${Env}_glue_job_dl_dcj_0026
+      Role: !Sub ${RoleARN}
+      ExecutionProperty:
+        MaxConcurrentRuns: 1
+      Command:
+        Name: glueetl
+        ScriptLocation: !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/dtm_glue_job_dl_dcj_0026.py
+        PythonVersion: "3"
+      DefaultArguments:
+        "--DEST_BUCKET_NAME": !Sub dtm-${Env}-s3-01-datalake-03-cleansing-data-csv
+        "--SRC_BUCKET_NAME": !Sub dtm-${Env}-s3-01-datalake-01-raw-data
+        "--DEST_FOLDER_NAME": "/ai21/tbba051g/"
+        "--SRC_FOLDER_NAME": "/ai21/TBBA051G/"
+        "--TempDir": !Sub s3://dtm-${Env}-s3-01-datalake-02-cleansing-data-csv-temp/temporary/
+        "--enable-continuous-cloudwatch-log": "true"
+        "--enable-metrics": ""
+        "--extra-jars": !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/lib/log4j-web-2.14.1.jar
+        "--extra-py-files": !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/lib/dtm_glue_job_lib.zip
+        "--job-bookmark-option": job-bookmark-enable
+        "--job-language": python
+      MaxRetries: 0
+      Timeout: 180
+      WorkerType: G.2X
+      NumberOfWorkers: 2
+      NotificationProperty:
+        NotifyDelayAfter: 30
+      GlueVersion: 2.0
+
+  CleansingJob0027:
+    Type: AWS::Glue::Job
+    Properties:
+      Name: !Sub dtm_${Env}_glue_job_dl_dcj_0027
+      Role: !Sub ${RoleARN}
+      ExecutionProperty:
+        MaxConcurrentRuns: 1
+      Command:
+        Name: glueetl
+        ScriptLocation: !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/dtm_glue_job_dl_dcj_0027.py
+        PythonVersion: "3"
+      DefaultArguments:
+        "--DEST_BUCKET_NAME": !Sub dtm-${Env}-s3-01-datalake-03-cleansing-data-csv
+        "--SRC_BUCKET_NAME": !Sub dtm-${Env}-s3-01-datalake-01-raw-data
+        "--DEST_FOLDER_NAME": "/ai21/tbba085g/"
+        "--SRC_FOLDER_NAME": "/ai21/TBBA085G/"
+        "--TempDir": !Sub s3://dtm-${Env}-s3-01-datalake-02-cleansing-data-csv-temp/temporary/
+        "--enable-continuous-cloudwatch-log": "true"
+        "--enable-metrics": ""
+        "--extra-jars": !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/lib/log4j-web-2.14.1.jar
+        "--extra-py-files": !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/lib/dtm_glue_job_lib.zip
+        "--job-bookmark-option": job-bookmark-enable
+        "--job-language": python
+      MaxRetries: 0
+      Timeout: 180
+      WorkerType: G.2X
+      NumberOfWorkers: 2
+      NotificationProperty:
+        NotifyDelayAfter: 30
+      GlueVersion: 2.0
+
+  CleansingJob0028:
+    Type: AWS::Glue::Job
+    Properties:
+      Name: !Sub dtm_${Env}_glue_job_dl_dcj_0028
+      Role: !Sub ${RoleARN}
+      ExecutionProperty:
+        MaxConcurrentRuns: 1
+      Command:
+        Name: glueetl
+        ScriptLocation: !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/dtm_glue_job_dl_dcj_0028.py
+        PythonVersion: "3"
+      DefaultArguments:
+        "--DEST_BUCKET_NAME": !Sub dtm-${Env}-s3-01-datalake-03-cleansing-data-csv
+        "--SRC_BUCKET_NAME": !Sub dtm-${Env}-s3-01-datalake-01-raw-data
+        "--DEST_FOLDER_NAME": "/ai21/tbba087g/"
+        "--SRC_FOLDER_NAME": "/ai21/TBBA087G/"
+        "--TempDir": !Sub s3://dtm-${Env}-s3-01-datalake-02-cleansing-data-csv-temp/temporary/
+        "--enable-continuous-cloudwatch-log": "true"
+        "--enable-metrics": ""
+        "--extra-jars": !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/lib/log4j-web-2.14.1.jar
+        "--extra-py-files": !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/lib/dtm_glue_job_lib.zip
+        "--job-bookmark-option": job-bookmark-enable
+        "--job-language": python
+      MaxRetries: 0
+      Timeout: 180
+      WorkerType: G.2X
+      NumberOfWorkers: 2
+      NotificationProperty:
+        NotifyDelayAfter: 30
+      GlueVersion: 2.0
+
+  CleansingJob0029:
+    Type: AWS::Glue::Job
+    Properties:
+      Name: !Sub dtm_${Env}_glue_job_dl_dcj_0029
+      Role: !Sub ${RoleARN}
+      ExecutionProperty:
+        MaxConcurrentRuns: 1
+      Command:
+        Name: glueetl
+        ScriptLocation: !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/dtm_glue_job_dl_dcj_0029.py
+        PythonVersion: "3"
+      DefaultArguments:
+        "--DEST_BUCKET_NAME": !Sub dtm-${Env}-s3-01-datalake-03-cleansing-data-csv
+        "--SRC_BUCKET_NAME": !Sub dtm-${Env}-s3-01-datalake-01-raw-data
+        "--DEST_FOLDER_NAME": "/ai21/tbba108g/"
+        "--SRC_FOLDER_NAME": "/ai21/TBBA108G/"
+        "--TempDir": !Sub s3://dtm-${Env}-s3-01-datalake-02-cleansing-data-csv-temp/temporary/
+        "--enable-continuous-cloudwatch-log": "true"
+        "--enable-metrics": ""
+        "--extra-jars": !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/lib/log4j-web-2.14.1.jar
+        "--extra-py-files": !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/lib/dtm_glue_job_lib.zip
+        "--job-bookmark-option": job-bookmark-enable
+        "--job-language": python
+      MaxRetries: 0
+      Timeout: 180
+      WorkerType: G.2X
+      NumberOfWorkers: 2
+      NotificationProperty:
+        NotifyDelayAfter: 30
+      GlueVersion: 2.0
+
+  CleansingJob0030:
+    Type: AWS::Glue::Job
+    Properties:
+      Name: !Sub dtm_${Env}_glue_job_dl_dcj_0030
+      Role: !Sub ${RoleARN}
+      ExecutionProperty:
+        MaxConcurrentRuns: 1
+      Command:
+        Name: glueetl
+        ScriptLocation: !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/dtm_glue_job_dl_dcj_0030.py
+        PythonVersion: "3"
+      DefaultArguments:
+        "--DEST_BUCKET_NAME": !Sub dtm-${Env}-s3-01-datalake-03-cleansing-data-csv
+        "--SRC_BUCKET_NAME": !Sub dtm-${Env}-s3-01-datalake-01-raw-data
+        "--DEST_FOLDER_NAME": "/ai21/tbba130g/"
+        "--SRC_FOLDER_NAME": "/ai21/TBBA130G/"
+        "--TempDir": !Sub s3://dtm-${Env}-s3-01-datalake-02-cleansing-data-csv-temp/temporary/
+        "--enable-continuous-cloudwatch-log": "true"
+        "--enable-metrics": ""
+        "--extra-jars": !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/lib/log4j-web-2.14.1.jar
+        "--extra-py-files": !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/lib/dtm_glue_job_lib.zip
+        "--job-bookmark-option": job-bookmark-enable
+        "--job-language": python
+      MaxRetries: 0
+      Timeout: 180
+      WorkerType: G.2X
+      NumberOfWorkers: 2
+      NotificationProperty:
+        NotifyDelayAfter: 30
+      GlueVersion: 2.0
+
+  CleansingJob0031:
+    Type: AWS::Glue::Job
+    Properties:
+      Name: !Sub dtm_${Env}_glue_job_dl_dcj_0031
+      Role: !Sub ${RoleARN}
+      ExecutionProperty:
+        MaxConcurrentRuns: 1
+      Command:
+        Name: glueetl
+        ScriptLocation: !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/dtm_glue_job_dl_dcj_0031.py
+        PythonVersion: "3"
+      DefaultArguments:
+        "--DEST_BUCKET_NAME": !Sub dtm-${Env}-s3-01-datalake-03-cleansing-data-csv
+        "--SRC_BUCKET_NAME": !Sub dtm-${Env}-s3-01-datalake-01-raw-data
+        "--DEST_FOLDER_NAME": "/ai21/tbbc017g/"
+        "--SRC_FOLDER_NAME": "/ai21/TBBC017G/"
+        "--TempDir": !Sub s3://dtm-${Env}-s3-01-datalake-02-cleansing-data-csv-temp/temporary/
+        "--enable-continuous-cloudwatch-log": "true"
+        "--enable-metrics": ""
+        "--extra-jars": !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/lib/log4j-web-2.14.1.jar
+        "--extra-py-files": !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/lib/dtm_glue_job_lib.zip
+        "--job-bookmark-option": job-bookmark-enable
+        "--job-language": python
+      MaxRetries: 0
+      Timeout: 180
+      WorkerType: G.2X
+      NumberOfWorkers: 2
+      NotificationProperty:
+        NotifyDelayAfter: 30
+      GlueVersion: 2.0
+
+  CleansingJob0032:
+    Type: AWS::Glue::Job
+    Properties:
+      Name: !Sub dtm_${Env}_glue_job_dl_dcj_0032
+      Role: !Sub ${RoleARN}
+      ExecutionProperty:
+        MaxConcurrentRuns: 1
+      Command:
+        Name: glueetl
+        ScriptLocation: !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/dtm_glue_job_dl_dcj_0032.py
+        PythonVersion: "3"
+      DefaultArguments:
+        "--DEST_BUCKET_NAME": !Sub dtm-${Env}-s3-01-datalake-03-cleansing-data-csv
+        "--SRC_BUCKET_NAME": !Sub dtm-${Env}-s3-01-datalake-01-raw-data
+        "--DEST_FOLDER_NAME": "/ai21/tbbc018g/"
+        "--SRC_FOLDER_NAME": "/ai21/TBBC018G/"
+        "--TempDir": !Sub s3://dtm-${Env}-s3-01-datalake-02-cleansing-data-csv-temp/temporary/
+        "--enable-continuous-cloudwatch-log": "true"
+        "--enable-metrics": ""
+        "--extra-jars": !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/lib/log4j-web-2.14.1.jar
+        "--extra-py-files": !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/lib/dtm_glue_job_lib.zip
+        "--job-bookmark-option": job-bookmark-enable
+        "--job-language": python
+      MaxRetries: 0
+      Timeout: 180
+      WorkerType: G.2X
+      NumberOfWorkers: 2
+      NotificationProperty:
+        NotifyDelayAfter: 30
+      GlueVersion: 2.0
+
+  CleansingJob0033:
+    Type: AWS::Glue::Job
+    Properties:
+      Name: !Sub dtm_${Env}_glue_job_dl_dcj_0033
+      Role: !Sub ${RoleARN}
+      ExecutionProperty:
+        MaxConcurrentRuns: 1
+      Command:
+        Name: glueetl
+        ScriptLocation: !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/dtm_glue_job_dl_dcj_0033.py
+        PythonVersion: "3"
+      DefaultArguments:
+        "--DEST_BUCKET_NAME": !Sub dtm-${Env}-s3-01-datalake-03-cleansing-data-csv
+        "--SRC_BUCKET_NAME": !Sub dtm-${Env}-s3-01-datalake-01-raw-data
+        "--DEST_FOLDER_NAME": "/ai21/tbbc040g/"
+        "--SRC_FOLDER_NAME": "/ai21/TBBC040G/"
+        "--TempDir": !Sub s3://dtm-${Env}-s3-01-datalake-02-cleansing-data-csv-temp/temporary/
+        "--enable-continuous-cloudwatch-log": "true"
+        "--enable-metrics": ""
+        "--extra-jars": !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/lib/log4j-web-2.14.1.jar
+        "--extra-py-files": !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/lib/dtm_glue_job_lib.zip
+        "--job-bookmark-option": job-bookmark-enable
+        "--job-language": python
+      MaxRetries: 0
+      Timeout: 180
+      WorkerType: G.2X
+      NumberOfWorkers: 2
+      NotificationProperty:
+        NotifyDelayAfter: 30
+      GlueVersion: 2.0
+
+  CleansingJob0034:
+    Type: AWS::Glue::Job
+    Properties:
+      Name: !Sub dtm_${Env}_glue_job_dl_dcj_0034
+      Role: !Sub ${RoleARN}
+      ExecutionProperty:
+        MaxConcurrentRuns: 1
+      Command:
+        Name: glueetl
+        ScriptLocation: !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/dtm_glue_job_dl_dcj_0034.py
+        PythonVersion: "3"
+      DefaultArguments:
+        "--DEST_BUCKET_NAME": !Sub dtm-${Env}-s3-01-datalake-03-cleansing-data-csv
+        "--SRC_BUCKET_NAME": !Sub dtm-${Env}-s3-01-datalake-01-raw-data
+        "--DEST_FOLDER_NAME": "/ai21/tbbc042g/"
+        "--SRC_FOLDER_NAME": "/ai21/TBBC042G/"
+        "--TempDir": !Sub s3://dtm-${Env}-s3-01-datalake-02-cleansing-data-csv-temp/temporary/
+        "--enable-continuous-cloudwatch-log": "true"
+        "--enable-metrics": ""
+        "--extra-jars": !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/lib/log4j-web-2.14.1.jar
+        "--extra-py-files": !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/lib/dtm_glue_job_lib.zip
+        "--job-bookmark-option": job-bookmark-enable
+        "--job-language": python
+      MaxRetries: 0
+      Timeout: 180
+      WorkerType: G.2X
+      NumberOfWorkers: 2
+      NotificationProperty:
+        NotifyDelayAfter: 30
+      GlueVersion: 2.0
+
+  CleansingJob0035:
+    Type: AWS::Glue::Job
+    Properties:
+      Name: !Sub dtm_${Env}_glue_job_dl_dcj_0035
+      Role: !Sub ${RoleARN}
+      ExecutionProperty:
+        MaxConcurrentRuns: 1
+      Command:
+        Name: glueetl
+        ScriptLocation: !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/dtm_glue_job_dl_dcj_0035.py
+        PythonVersion: "3"
+      DefaultArguments:
+        "--DEST_BUCKET_NAME": !Sub dtm-${Env}-s3-01-datalake-03-cleansing-data-csv
+        "--SRC_BUCKET_NAME": !Sub dtm-${Env}-s3-01-datalake-01-raw-data
+        "--DEST_FOLDER_NAME": "/ai21/tbbc060g/"
+        "--SRC_FOLDER_NAME": "/ai21/TBBC060G/"
+        "--TempDir": !Sub s3://dtm-${Env}-s3-01-datalake-02-cleansing-data-csv-temp/temporary/
+        "--enable-continuous-cloudwatch-log": "true"
+        "--enable-metrics": ""
+        "--extra-jars": !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/lib/log4j-web-2.14.1.jar
+        "--extra-py-files": !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/lib/dtm_glue_job_lib.zip
+        "--job-bookmark-option": job-bookmark-enable
+        "--job-language": python
+      MaxRetries: 0
+      Timeout: 180
+      WorkerType: G.2X
+      NumberOfWorkers: 2
+      NotificationProperty:
+        NotifyDelayAfter: 30
+      GlueVersion: 2.0
+
+  CleansingJob0036:
+    Type: AWS::Glue::Job
+    Properties:
+      Name: !Sub dtm_${Env}_glue_job_dl_dcj_0036
+      Role: !Sub ${RoleARN}
+      ExecutionProperty:
+        MaxConcurrentRuns: 1
+      Command:
+        Name: glueetl
+        ScriptLocation: !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/dtm_glue_job_dl_dcj_0036.py
+        PythonVersion: "3"
+      DefaultArguments:
+        "--DEST_BUCKET_NAME": !Sub dtm-${Env}-s3-01-datalake-03-cleansing-data-csv
+        "--SRC_BUCKET_NAME": !Sub dtm-${Env}-s3-01-datalake-01-raw-data
+        "--DEST_FOLDER_NAME": "/ai21/tbbc062g/"
+        "--SRC_FOLDER_NAME": "/ai21/TBBC062G/"
+        "--TempDir": !Sub s3://dtm-${Env}-s3-01-datalake-02-cleansing-data-csv-temp/temporary/
+        "--enable-continuous-cloudwatch-log": "true"
+        "--enable-metrics": ""
+        "--extra-jars": !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/lib/log4j-web-2.14.1.jar
+        "--extra-py-files": !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/lib/dtm_glue_job_lib.zip
+        "--job-bookmark-option": job-bookmark-enable
+        "--job-language": python
+      MaxRetries: 0
+      Timeout: 180
+      WorkerType: G.2X
+      NumberOfWorkers: 2
+      NotificationProperty:
+        NotifyDelayAfter: 30
+      GlueVersion: 2.0
+
+  CleansingJob0037:
+    Type: AWS::Glue::Job
+    Properties:
+      Name: !Sub dtm_${Env}_glue_job_dl_dcj_0037
+      Role: !Sub ${RoleARN}
+      ExecutionProperty:
+        MaxConcurrentRuns: 1
+      Command:
+        Name: glueetl
+        ScriptLocation: !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/dtm_glue_job_dl_dcj_0037.py
+        PythonVersion: "3"
+      DefaultArguments:
+        "--DEST_BUCKET_NAME": !Sub dtm-${Env}-s3-01-datalake-03-cleansing-data-csv
+        "--SRC_BUCKET_NAME": !Sub dtm-${Env}-s3-01-datalake-01-raw-data
+        "--DEST_FOLDER_NAME": "/ai21/tbbf004m/"
+        "--SRC_FOLDER_NAME": "/ai21/TBBF004M/"
+        "--TempDir": !Sub s3://dtm-${Env}-s3-01-datalake-02-cleansing-data-csv-temp/temporary/
+        "--enable-continuous-cloudwatch-log": "true"
+        "--enable-metrics": ""
+        "--extra-jars": !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/lib/log4j-web-2.14.1.jar
+        "--extra-py-files": !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/lib/dtm_glue_job_lib.zip
+        "--job-bookmark-option": job-bookmark-enable
+        "--job-language": python
+      MaxRetries: 0
+      Timeout: 180
+      WorkerType: G.2X
+      NumberOfWorkers: 2
+      NotificationProperty:
+        NotifyDelayAfter: 30
+      GlueVersion: 2.0
+
+  CleansingJob0038:
+    Type: AWS::Glue::Job
+    Properties:
+      Name: !Sub dtm_${Env}_glue_job_dl_dcj_0038
+      Role: !Sub ${RoleARN}
+      ExecutionProperty:
+        MaxConcurrentRuns: 1
+      Command:
+        Name: glueetl
+        ScriptLocation: !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/dtm_glue_job_dl_dcj_0038.py
+        PythonVersion: "3"
+      DefaultArguments:
+        "--DEST_BUCKET_NAME": !Sub dtm-${Env}-s3-01-datalake-03-cleansing-data-csv
+        "--SRC_BUCKET_NAME": !Sub dtm-${Env}-s3-01-datalake-01-raw-data
+        "--DEST_FOLDER_NAME": "/ai21/tbbf005m/"
+        "--SRC_FOLDER_NAME": "/ai21/TBBF005M/"
+        "--TempDir": !Sub s3://dtm-${Env}-s3-01-datalake-02-cleansing-data-csv-temp/temporary/
+        "--enable-continuous-cloudwatch-log": "true"
+        "--enable-metrics": ""
+        "--extra-jars": !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/lib/log4j-web-2.14.1.jar
+        "--extra-py-files": !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/lib/dtm_glue_job_lib.zip
+        "--job-bookmark-option": job-bookmark-enable
+        "--job-language": python
+      MaxRetries: 0
+      Timeout: 180
+      WorkerType: G.2X
+      NumberOfWorkers: 2
+      NotificationProperty:
+        NotifyDelayAfter: 30
+      GlueVersion: 2.0
+
+  CleansingJob0040:
+    Type: AWS::Glue::Job
+    Properties:
+      Name: !Sub dtm_${Env}_glue_job_dl_dcj_0040
+      Role: !Sub ${RoleARN}
+      ExecutionProperty:
+        MaxConcurrentRuns: 1
+      Command:
+        Name: glueetl
+        ScriptLocation: !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/dtm_glue_job_dl_dcj_0040.py
+        PythonVersion: "3"
+      DefaultArguments:
+        "--DEST_BUCKET_NAME": !Sub dtm-${Env}-s3-01-datalake-03-cleansing-data-csv
+        "--SRC_BUCKET_NAME": !Sub dtm-${Env}-s3-01-datalake-01-raw-data
+        "--DEST_FOLDER_NAME": "/ai21/tbbq005g/"
+        "--SRC_FOLDER_NAME": "/ai21/TBBQ005G/"
+        "--TempDir": !Sub s3://dtm-${Env}-s3-01-datalake-02-cleansing-data-csv-temp/temporary/
+        "--enable-continuous-cloudwatch-log": "true"
+        "--enable-metrics": ""
+        "--extra-jars": !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/lib/log4j-web-2.14.1.jar
+        "--extra-py-files": !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/lib/dtm_glue_job_lib.zip
+        "--job-bookmark-option": job-bookmark-enable
+        "--job-language": python
+      MaxRetries: 0
+      Timeout: 180
+      WorkerType: G.2X
+      NumberOfWorkers: 2
+      NotificationProperty:
+        NotifyDelayAfter: 30
+      GlueVersion: 2.0
+
+  CleansingJob0041:
+    Type: AWS::Glue::Job
+    Properties:
+      Name: !Sub dtm_${Env}_glue_job_dl_dcj_0041
+      Role: !Sub ${RoleARN}
+      ExecutionProperty:
+        MaxConcurrentRuns: 1
+      Command:
+        Name: glueetl
+        ScriptLocation: !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/dtm_glue_job_dl_dcj_0041.py
+        PythonVersion: "3"
+      DefaultArguments:
+        "--DEST_BUCKET_NAME": !Sub dtm-${Env}-s3-01-datalake-03-cleansing-data-csv
+        "--SRC_BUCKET_NAME": !Sub dtm-${Env}-s3-01-datalake-01-raw-data
+        "--DEST_FOLDER_NAME": "/ai21/tbg2004m/"
+        "--SRC_FOLDER_NAME": "/ai21/TBG2004M/"
+        "--TempDir": !Sub s3://dtm-${Env}-s3-01-datalake-02-cleansing-data-csv-temp/temporary/
+        "--enable-continuous-cloudwatch-log": "true"
+        "--enable-metrics": ""
+        "--extra-jars": !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/lib/log4j-web-2.14.1.jar
+        "--extra-py-files": !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/lib/dtm_glue_job_lib.zip
+        "--job-bookmark-option": job-bookmark-enable
+        "--job-language": python
+      MaxRetries: 0
+      Timeout: 180
+      WorkerType: G.2X
+      NumberOfWorkers: 2
+      NotificationProperty:
+        NotifyDelayAfter: 30
+      GlueVersion: 2.0
+
+  CleansingJob0043:
+    Type: AWS::Glue::Job
+    Properties:
+      Name: !Sub dtm_${Env}_glue_job_dl_dcj_0043
+      Role: !Sub ${RoleARN}
+      ExecutionProperty:
+        MaxConcurrentRuns: 1
+      Command:
+        Name: glueetl
+        ScriptLocation: !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/dtm_glue_job_dl_dcj_0043.py
+        PythonVersion: "3"
+      DefaultArguments:
+        "--DEST_BUCKET_NAME": !Sub dtm-${Env}-s3-01-datalake-03-cleansing-data-csv
+        "--SRC_BUCKET_NAME": !Sub dtm-${Env}-s3-01-datalake-01-raw-data
+        "--DEST_FOLDER_NAME": "/ai21/tbtec04g/"
+        "--SRC_FOLDER_NAME": "/ai21/TBTEC04G/"
+        "--TempDir": !Sub s3://dtm-${Env}-s3-01-datalake-02-cleansing-data-csv-temp/temporary/
+        "--enable-continuous-cloudwatch-log": "true"
+        "--enable-metrics": ""
+        "--extra-jars": !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/lib/log4j-web-2.14.1.jar
+        "--extra-py-files": !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/lib/dtm_glue_job_lib.zip
+        "--job-bookmark-option": job-bookmark-enable
+        "--job-language": python
+      MaxRetries: 0
+      Timeout: 180
+      WorkerType: G.2X
+      NumberOfWorkers: 2
+      NotificationProperty:
+        NotifyDelayAfter: 30
+      GlueVersion: 2.0
+
+  CleansingJob0044:
+    Type: AWS::Glue::Job
+    Properties:
+      Name: !Sub dtm_${Env}_glue_job_dl_dcj_0044
+      Role: !Sub ${RoleARN}
+      ExecutionProperty:
+        MaxConcurrentRuns: 1
+      Command:
+        Name: glueetl
+        ScriptLocation: !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/dtm_glue_job_dl_dcj_0044.py
+        PythonVersion: "3"
+      DefaultArguments:
+        "--DEST_BUCKET_NAME": !Sub dtm-${Env}-s3-01-datalake-03-cleansing-data-csv
+        "--SRC_BUCKET_NAME": !Sub dtm-${Env}-s3-01-datalake-01-raw-data
+        "--DEST_FOLDER_NAME": "/ai21/tbtec05g/"
+        "--SRC_FOLDER_NAME": "/ai21/TBTEC05G/"
+        "--TempDir": !Sub s3://dtm-${Env}-s3-01-datalake-02-cleansing-data-csv-temp/temporary/
+        "--enable-continuous-cloudwatch-log": "true"
+        "--enable-metrics": ""
+        "--extra-jars": !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/lib/log4j-web-2.14.1.jar
+        "--extra-py-files": !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/lib/dtm_glue_job_lib.zip
+        "--job-bookmark-option": job-bookmark-enable
+        "--job-language": python
+      MaxRetries: 0
+      Timeout: 180
+      WorkerType: G.2X
+      NumberOfWorkers: 2
+      NotificationProperty:
+        NotifyDelayAfter: 30
+      GlueVersion: 2.0
+
+  CleansingJob0046:
+    Type: AWS::Glue::Job
+    Properties:
+      Name: !Sub dtm_${Env}_glue_job_dl_dcj_0046
+      Role: !Sub ${RoleARN}
+      ExecutionProperty:
+        MaxConcurrentRuns: 1
+      Command:
+        Name: glueetl
+        ScriptLocation: !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/dtm_glue_job_dl_dcj_0046.py
+        PythonVersion: "3"
+      DefaultArguments:
+        "--DEST_BUCKET_NAME": !Sub dtm-${Env}-s3-01-datalake-03-cleansing-data-csv
+        "--SRC_BUCKET_NAME": !Sub dtm-${Env}-s3-01-datalake-01-raw-data
+        "--DEST_FOLDER_NAME": "/ai21/tbtec23g/"
+        "--SRC_FOLDER_NAME": "/ai21/TBTEC23G/"
+        "--TempDir": !Sub s3://dtm-${Env}-s3-01-datalake-02-cleansing-data-csv-temp/temporary/
+        "--enable-continuous-cloudwatch-log": "true"
+        "--enable-metrics": ""
+        "--extra-jars": !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/lib/log4j-web-2.14.1.jar
+        "--extra-py-files": !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/lib/dtm_glue_job_lib.zip
+        "--job-bookmark-option": job-bookmark-enable
+        "--job-language": python
+      MaxRetries: 0
+      Timeout: 180
+      WorkerType: G.2X
+      NumberOfWorkers: 2
+      NotificationProperty:
+        NotifyDelayAfter: 30
+      GlueVersion: 2.0
+
+  CleansingJob0048:
+    Type: AWS::Glue::Job
+    Properties:
+      Name: !Sub dtm_${Env}_glue_job_dl_dcj_0048
+      Role: !Sub ${RoleARN}
+      ExecutionProperty:
+        MaxConcurrentRuns: 1
+      Command:
+        Name: glueetl
+        ScriptLocation: !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/dtm_glue_job_dl_dcj_0048.py
+        PythonVersion: "3"
+      DefaultArguments:
+        "--DEST_BUCKET_NAME": !Sub dtm-${Env}-s3-01-datalake-03-cleansing-data-csv
+        "--SRC_BUCKET_NAME": !Sub dtm-${Env}-s3-01-datalake-01-raw-data
+        "--DEST_FOLDER_NAME": "/ai21/tbtec83g/"
+        "--SRC_FOLDER_NAME": "/ai21/TBTEC83G/"
+        "--TempDir": !Sub s3://dtm-${Env}-s3-01-datalake-02-cleansing-data-csv-temp/temporary/
+        "--enable-continuous-cloudwatch-log": "true"
+        "--enable-metrics": ""
+        "--extra-jars": !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/lib/log4j-web-2.14.1.jar
+        "--extra-py-files": !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/lib/dtm_glue_job_lib.zip
+        "--job-bookmark-option": job-bookmark-enable
+        "--job-language": python
+      MaxRetries: 0
+      Timeout: 180
+      WorkerType: G.2X
+      NumberOfWorkers: 2
+      NotificationProperty:
+        NotifyDelayAfter: 30
+      GlueVersion: 2.0
+
+  CleansingJob0050:
+    Type: AWS::Glue::Job
+    Properties:
+      Name: !Sub dtm_${Env}_glue_job_dl_dcj_0050
+      Role: !Sub ${RoleARN}
+      ExecutionProperty:
+        MaxConcurrentRuns: 1
+      Command:
+        Name: glueetl
+        ScriptLocation: !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/dtm_glue_job_dl_dcj_0050.py
+        PythonVersion: "3"
+      DefaultArguments:
+        "--DEST_BUCKET_NAME": !Sub dtm-${Env}-s3-01-datalake-03-cleansing-data-csv
+        "--SRC_BUCKET_NAME": !Sub dtm-${Env}-s3-01-datalake-01-raw-data
+        "--DEST_FOLDER_NAME": "/ai21/tbtec94g/"
+        "--SRC_FOLDER_NAME": "/ai21/TBTEC94G/"
+        "--TempDir": !Sub s3://dtm-${Env}-s3-01-datalake-02-cleansing-data-csv-temp/temporary/
+        "--enable-continuous-cloudwatch-log": "true"
+        "--enable-metrics": ""
+        "--extra-jars": !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/lib/log4j-web-2.14.1.jar
+        "--extra-py-files": !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/lib/dtm_glue_job_lib.zip
+        "--job-bookmark-option": job-bookmark-enable
+        "--job-language": python
+      MaxRetries: 0
+      Timeout: 180
+      WorkerType: G.2X
+      NumberOfWorkers: 2
+      NotificationProperty:
+        NotifyDelayAfter: 30
+      GlueVersion: 2.0
+
+  CleansingJob0064:
+    Type: AWS::Glue::Job
+    Properties:
+      Name: !Sub dtm_${Env}_glue_job_dl_dcj_0064
+      Role: !Sub ${RoleARN}
+      ExecutionProperty:
+        MaxConcurrentRuns: 1
+      Command:
+        Name: glueetl
+        ScriptLocation: !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/dtm_glue_job_dl_dcj_0064.py
+        PythonVersion: "3"
+      DefaultArguments:
+        "--DEST_BUCKET_NAME": !Sub dtm-${Env}-s3-01-datalake-03-cleansing-data-csv
+        "--SRC_BUCKET_NAME": !Sub dtm-${Env}-s3-01-datalake-01-raw-data
+        "--DEST_FOLDER_NAME": "/ai21/tbv0231m/"
+        "--SRC_FOLDER_NAME": "/ai21/TBV0231M/"
+        "--TempDir": !Sub s3://dtm-${Env}-s3-01-datalake-02-cleansing-data-csv-temp/temporary/
+        "--enable-continuous-cloudwatch-log": "true"
+        "--enable-metrics": ""
+        "--extra-jars": !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/lib/log4j-web-2.14.1.jar
+        "--extra-py-files": !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/lib/dtm_glue_job_lib.zip
+        "--job-bookmark-option": job-bookmark-enable
+        "--job-language": python
+      MaxRetries: 0
+      Timeout: 180
+      WorkerType: G.2X
+      NumberOfWorkers: 2
+      NotificationProperty:
+        NotifyDelayAfter: 30
+      GlueVersion: 2.0
+
+  CleansingJob0065:
+    Type: AWS::Glue::Job
+    Properties:
+      Name: !Sub dtm_${Env}_glue_job_dl_dcj_0065
+      Role: !Sub ${RoleARN}
+      ExecutionProperty:
+        MaxConcurrentRuns: 1
+      Command:
+        Name: glueetl
+        ScriptLocation: !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/dtm_glue_job_dl_dcj_0065.py
+        PythonVersion: "3"
+      DefaultArguments:
+        "--DEST_BUCKET_NAME": !Sub dtm-${Env}-s3-01-datalake-03-cleansing-data-csv
+        "--SRC_BUCKET_NAME": !Sub dtm-${Env}-s3-01-datalake-01-raw-data
+        "--DEST_FOLDER_NAME": "/ai21/tbv0232m/"
+        "--SRC_FOLDER_NAME": "/ai21/TBV0232M/"
+        "--TempDir": !Sub s3://dtm-${Env}-s3-01-datalake-02-cleansing-data-csv-temp/temporary/
+        "--enable-continuous-cloudwatch-log": "true"
+        "--enable-metrics": ""
+        "--extra-jars": !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/lib/log4j-web-2.14.1.jar
+        "--extra-py-files": !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/lib/dtm_glue_job_lib.zip
+        "--job-bookmark-option": job-bookmark-enable
+        "--job-language": python
+      MaxRetries: 0
+      Timeout: 180
+      WorkerType: G.2X
+      NumberOfWorkers: 2
+      NotificationProperty:
+        NotifyDelayAfter: 30
+      GlueVersion: 2.0
+
+  CleansingJob0068:
+    Type: AWS::Glue::Job
+    Properties:
+      Name: !Sub dtm_${Env}_glue_job_dl_dcj_0068
+      Role: !Sub ${RoleARN}
+      ExecutionProperty:
+        MaxConcurrentRuns: 1
+      Command:
+        Name: glueetl
+        ScriptLocation: !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/dtm_glue_job_dl_dcj_0068.py
+        PythonVersion: "3"
+      DefaultArguments:
+        "--DEST_BUCKET_NAME": !Sub dtm-${Env}-s3-01-datalake-03-cleansing-data-csv
+        "--SRC_BUCKET_NAME": !Sub dtm-${Env}-s3-01-datalake-01-raw-data
+        "--DEST_FOLDER_NAME": "/ai21/tbv0201m/"
+        "--SRC_FOLDER_NAME": "/ai21/TBV0201M/"
+        "--TempDir": !Sub s3://dtm-${Env}-s3-01-datalake-02-cleansing-data-csv-temp/temporary/
+        "--enable-continuous-cloudwatch-log": "true"
+        "--enable-metrics": ""
+        "--extra-jars": !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/lib/log4j-web-2.14.1.jar
+        "--extra-py-files": !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/lib/dtm_glue_job_lib.zip
+        "--job-bookmark-option": job-bookmark-enable
+        "--job-language": python
+      MaxRetries: 0
+      Timeout: 180
+      WorkerType: G.2X
+      NumberOfWorkers: 2
+      NotificationProperty:
+        NotifyDelayAfter: 30
+      GlueVersion: 2.0
+
+  CleansingJob0069:
+    Type: AWS::Glue::Job
+    Properties:
+      Name: !Sub dtm_${Env}_glue_job_dl_dcj_0069
+      Role: !Sub ${RoleARN}
+      ExecutionProperty:
+        MaxConcurrentRuns: 1
+      Command:
+        Name: glueetl
+        ScriptLocation: !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/dtm_glue_job_dl_dcj_0069.py
+        PythonVersion: "3"
+      DefaultArguments:
+        "--DEST_BUCKET_NAME": !Sub dtm-${Env}-s3-01-datalake-03-cleansing-data-csv
+        "--SRC_BUCKET_NAME": !Sub dtm-${Env}-s3-01-datalake-01-raw-data
+        "--DEST_FOLDER_NAME": "/ai21/tbv0214m/"
+        "--SRC_FOLDER_NAME": "/ai21/TBV0214M/"
+        "--TempDir": !Sub s3://dtm-${Env}-s3-01-datalake-02-cleansing-data-csv-temp/temporary/
+        "--enable-continuous-cloudwatch-log": "true"
+        "--enable-metrics": ""
+        "--extra-jars": !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/lib/log4j-web-2.14.1.jar
+        "--extra-py-files": !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/lib/dtm_glue_job_lib.zip
+        "--job-bookmark-option": job-bookmark-enable
+        "--job-language": python
+      MaxRetries: 0
+      Timeout: 180
+      WorkerType: G.2X
+      NumberOfWorkers: 2
+      NotificationProperty:
+        NotifyDelayAfter: 30
+      GlueVersion: 2.0
+
+  CleansingJob0077:
+    Type: AWS::Glue::Job
+    Properties:
+      Name: !Sub dtm_${Env}_glue_job_dl_dcj_0077
+      Role: !Sub ${RoleARN}
+      ExecutionProperty:
+        MaxConcurrentRuns: 1
+      Command:
+        Name: glueetl
+        ScriptLocation: !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/dtm_glue_job_dl_dcj_0077.py
+        PythonVersion: "3"
+      DefaultArguments:
+        "--DEST_BUCKET_NAME": !Sub dtm-${Env}-s3-01-datalake-03-cleansing-data-csv
+        "--SRC_BUCKET_NAME": !Sub dtm-${Env}-s3-01-datalake-01-raw-data
+        "--DEST_FOLDER_NAME": "/ai21/tbtht01g/"
+        "--SRC_FOLDER_NAME": "/ai21/TBTHT01G/"
+        "--TempDir": !Sub s3://dtm-${Env}-s3-01-datalake-02-cleansing-data-csv-temp/temporary/
+        "--enable-continuous-cloudwatch-log": "true"
+        "--enable-metrics": ""
+        "--extra-jars": !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/lib/log4j-web-2.14.1.jar
+        "--extra-py-files": !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/lib/dtm_glue_job_lib.zip
+        "--job-bookmark-option": job-bookmark-enable
+        "--job-language": python
+      MaxRetries: 0
+      Timeout: 180
+      WorkerType: G.2X
+      NumberOfWorkers: 2
+      NotificationProperty:
+        NotifyDelayAfter: 30
+      GlueVersion: 2.0
+
+  CleansingJob0078:
+    Type: AWS::Glue::Job
+    Properties:
+      Name: !Sub dtm_${Env}_glue_job_dl_dcj_0078
+      Role: !Sub ${RoleARN}
+      ExecutionProperty:
+        MaxConcurrentRuns: 1
+      Command:
+        Name: glueetl
+        ScriptLocation: !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/dtm_glue_job_dl_dcj_0078.py
+        PythonVersion: "3"
+      DefaultArguments:
+        "--DEST_BUCKET_NAME": !Sub dtm-${Env}-s3-01-datalake-03-cleansing-data-csv
+        "--SRC_BUCKET_NAME": !Sub dtm-${Env}-s3-01-datalake-01-raw-data
+        "--DEST_FOLDER_NAME": "/ai21/tbtht05g/"
+        "--SRC_FOLDER_NAME": "/ai21/TBTHT05G/"
+        "--TempDir": !Sub s3://dtm-${Env}-s3-01-datalake-02-cleansing-data-csv-temp/temporary/
+        "--enable-continuous-cloudwatch-log": "true"
+        "--enable-metrics": ""
+        "--extra-jars": !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/lib/log4j-web-2.14.1.jar
+        "--extra-py-files": !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/lib/dtm_glue_job_lib.zip
+        "--job-bookmark-option": job-bookmark-enable
+        "--job-language": python
+      MaxRetries: 0
+      Timeout: 180
+      WorkerType: G.2X
+      NumberOfWorkers: 2
+      NotificationProperty:
+        NotifyDelayAfter: 30
+      GlueVersion: 2.0
+
+  CleansingJob0080:
+    Type: AWS::Glue::Job
+    Properties:
+      Name: !Sub dtm_${Env}_glue_job_dl_dcj_0080
+      Role: !Sub ${RoleARN}
+      ExecutionProperty:
+        MaxConcurrentRuns: 1
+      Command:
+        Name: glueetl
+        ScriptLocation: !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/dtm_glue_job_dl_dcj_0080.py
+        PythonVersion: "3"
+      DefaultArguments:
+        "--DEST_BUCKET_NAME": !Sub dtm-${Env}-s3-01-datalake-03-cleansing-data-csv
+        "--SRC_BUCKET_NAME": !Sub dtm-${Env}-s3-01-datalake-01-raw-data
+        "--DEST_FOLDER_NAME": "/ai21/tbba003g/"
+        "--SRC_FOLDER_NAME": "/ai21/TBBA003G/"
+        "--TempDir": !Sub s3://dtm-${Env}-s3-01-datalake-02-cleansing-data-csv-temp/temporary/
+        "--enable-continuous-cloudwatch-log": "true"
+        "--enable-metrics": ""
+        "--extra-jars": !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/lib/log4j-web-2.14.1.jar
+        "--extra-py-files": !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/lib/dtm_glue_job_lib.zip
+        "--job-bookmark-option": job-bookmark-enable
+        "--job-language": python
+      MaxRetries: 0
+      Timeout: 180
+      WorkerType: G.2X
+      NumberOfWorkers: 2
+      NotificationProperty:
+        NotifyDelayAfter: 30
+      GlueVersion: 2.0
+
+  CleansingJob0081:
+    Type: AWS::Glue::Job
+    Properties:
+      Name: !Sub dtm_${Env}_glue_job_dl_dcj_0081
+      Role: !Sub ${RoleARN}
+      ExecutionProperty:
+        MaxConcurrentRuns: 1
+      Command:
+        Name: glueetl
+        ScriptLocation: !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/dtm_glue_job_dl_dcj_0081.py
+        PythonVersion: "3"
+      DefaultArguments:
+        "--DEST_BUCKET_NAME": !Sub dtm-${Env}-s3-01-datalake-03-cleansing-data-csv
+        "--SRC_BUCKET_NAME": !Sub dtm-${Env}-s3-01-datalake-01-raw-data
+        "--DEST_FOLDER_NAME": "/ai21/tbba117g/"
+        "--SRC_FOLDER_NAME": "/ai21/TBBA117G/"
+        "--TempDir": !Sub s3://dtm-${Env}-s3-01-datalake-02-cleansing-data-csv-temp/temporary/
+        "--enable-continuous-cloudwatch-log": "true"
+        "--enable-metrics": ""
+        "--extra-jars": !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/lib/log4j-web-2.14.1.jar
+        "--extra-py-files": !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/lib/dtm_glue_job_lib.zip
+        "--job-bookmark-option": job-bookmark-enable
+        "--job-language": python
+      MaxRetries: 0
+      Timeout: 180
+      WorkerType: G.2X
+      NumberOfWorkers: 2
+      NotificationProperty:
+        NotifyDelayAfter: 30
+      GlueVersion: 2.0
+
+  CleansingJob0082:
+    Type: AWS::Glue::Job
+    Properties:
+      Name: !Sub dtm_${Env}_glue_job_dl_dcj_0082
+      Role: !Sub ${RoleARN}
+      ExecutionProperty:
+        MaxConcurrentRuns: 1
+      Command:
+        Name: glueetl
+        ScriptLocation: !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/dtm_glue_job_dl_dcj_0082.py
+        PythonVersion: "3"
+      DefaultArguments:
+        "--DEST_BUCKET_NAME": !Sub dtm-${Env}-s3-01-datalake-03-cleansing-data-csv
+        "--SRC_BUCKET_NAME": !Sub dtm-${Env}-s3-01-datalake-01-raw-data
+        "--DEST_FOLDER_NAME": "/ai21/tbv0234m/"
+        "--SRC_FOLDER_NAME": "/ai21/TBV0234M/"
+        "--TempDir": !Sub s3://dtm-${Env}-s3-01-datalake-02-cleansing-data-csv-temp/temporary/
+        "--enable-continuous-cloudwatch-log": "true"
+        "--enable-metrics": ""
+        "--extra-jars": !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/lib/log4j-web-2.14.1.jar
+        "--extra-py-files": !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/lib/dtm_glue_job_lib.zip
+        "--job-bookmark-option": job-bookmark-enable
+        "--job-language": python
+      MaxRetries: 0
+      Timeout: 180
+      WorkerType: G.2X
+      NumberOfWorkers: 2
+      NotificationProperty:
+        NotifyDelayAfter: 30
+      GlueVersion: 2.0
+
+  CleansingJob0083:
+    Type: AWS::Glue::Job
+    Properties:
+      Name: !Sub dtm_${Env}_glue_job_dl_dcj_0083
+      Role: !Sub ${RoleARN}
+      ExecutionProperty:
+        MaxConcurrentRuns: 1
+      Command:
+        Name: glueetl
+        ScriptLocation: !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/dtm_glue_job_dl_dcj_0083.py
+        PythonVersion: "3"
+      DefaultArguments:
+        "--DEST_BUCKET_NAME": !Sub dtm-${Env}-s3-01-datalake-03-cleansing-data-csv
+        "--SRC_BUCKET_NAME": !Sub dtm-${Env}-s3-01-datalake-01-raw-data
+        "--DEST_FOLDER_NAME": "/ai21/tbba095g/"
+        "--SRC_FOLDER_NAME": "/ai21/TBBA095G/"
+        "--TempDir": !Sub s3://dtm-${Env}-s3-01-datalake-02-cleansing-data-csv-temp/temporary/
+        "--enable-continuous-cloudwatch-log": "true"
+        "--enable-metrics": ""
+        "--extra-jars": !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/lib/log4j-web-2.14.1.jar
+        "--extra-py-files": !Sub s3://dtm-${Env}-s3-01-datalake-11-script-01-cleansing/01_glue_job/lib/dtm_glue_job_lib.zip
+        "--job-bookmark-option": job-bookmark-enable
+        "--job-language": python
+      MaxRetries: 0
+      Timeout: 180
+      WorkerType: G.2X
+      NumberOfWorkers: 2
+      NotificationProperty:
+        NotifyDelayAfter: 30
+      GlueVersion: 2.0
